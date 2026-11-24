@@ -1,6 +1,10 @@
 ﻿import pickle
+from pathlib import Path
+
 import pandas as pd
 import streamlit as st
+
+APP_DIR = Path(__file__).resolve().parent
 
 st.set_page_config(page_title="Disease & Health Risk Predictor", page_icon="🩺", layout="wide")
 
@@ -294,15 +298,19 @@ button[data-baseweb="tab"][aria-selected="true"] {
 
 @st.cache_resource
 def load_disease_model():
-    model = pickle.load(open("symptom_disease_model.pkl", "rb"))
-    features = pickle.load(open("symptom_features.pkl", "rb"))
+    with (APP_DIR / "symptom_disease_model.pkl").open("rb") as model_file:
+        model = pickle.load(model_file)
+    with (APP_DIR / "symptom_features.pkl").open("rb") as features_file:
+        features = pickle.load(features_file)
     return model, features
 
 
 @st.cache_resource
 def load_health_model():
-    model = pickle.load(open("Health_risk_predictor.pkl", "rb"))
-    encoders = pickle.load(open("label_encoders.pkl", "rb"))
+    with (APP_DIR / "Health_risk_predictor.pkl").open("rb") as model_file:
+        model = pickle.load(model_file)
+    with (APP_DIR / "label_encoders.pkl").open("rb") as encoders_file:
+        encoders = pickle.load(encoders_file)
     return model, encoders
 
 
